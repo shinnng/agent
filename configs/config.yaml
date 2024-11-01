@@ -1,0 +1,18 @@
+# agent server
+agent:
+  addr: 0.0.0.0:8000
+  timeout: 1s
+
+data:
+  # data cache layer
+  redis:
+    addr: 192.168.0.207:16379
+    db: 0
+    username: 
+    password:
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+
+  # data abstraction layer
+  hasura:
+    addr: "http://192.168.0.193:8080"   # http://172.23.31.135:8000
