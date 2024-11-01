@@ -1,0 +1,39 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "agent/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Config {
+  Agent agent = 1;
+  Data data = 2;
+}
+
+message Agent {
+  string network = 1;
+  string addr = 2;
+  google.protobuf.Duration timeout = 3;
+}
+
+message Data {
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    int32 db = 3;
+    string username = 4;
+    string password = 5;
+    google.protobuf.Duration read_timeout = 6;
+    google.protobuf.Duration write_timeout = 7;
+  }
+
+  message Hasura {
+    string addr = 1;
+  }
+
+  Redis redis = 1;
+  Hasura hasura = 2;
+}
+
+
+
