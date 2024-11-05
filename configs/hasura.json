@@ -1,0 +1,142 @@
+{
+  "resource_version": 50,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "mechain_data",
+        "kind": "postgres",
+        "tables": [],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "connection_parameters": {
+                "database": "mechain_data",
+                "host": "192.168.0.207",
+                "password": "user123456",
+                "port": 5432,
+                "username": "meuser"
+              }
+            },
+            "isolation_level": "read-committed",
+            "pool_settings": {
+              "connection_lifetime": 600,
+              "max_connections": 100
+            },
+            "use_prepared_statements": false
+          }
+        }
+      },
+      {
+        "name": "sync_pro_mechain",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "addresses",
+              "schema": "public"
+            }
+          },
+          {
+            "table": {
+              "name": "block",
+              "schema": "public"
+            }
+          },
+          {
+            "table": {
+              "name": "check_in",
+              "schema": "public"
+            }
+          },
+          {
+            "table": {
+              "name": "message",
+              "schema": "public"
+            }
+          },
+          {
+            "table": {
+              "name": "transaction",
+              "schema": "public"
+            }
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "connection_parameters": {
+                "database": "sync_pro_mechain",
+                "host": "192.168.0.207",
+                "password": "user123456",
+                "port": 5432,
+                "username": "root"
+              }
+            },
+            "isolation_level": "read-committed",
+            "pool_settings": {
+              "connection_lifetime": 600,
+              "max_connections": 100
+            },
+            "use_prepared_statements": false
+          }
+        }
+      }
+    ],
+    "query_collections": [
+      {
+        "name": "allowed-queries",
+        "definition": {
+          "queries": [
+            {
+              "name": "blocks",
+              "query": "query MyQuery {\n  block(limit: 20) {\n    hash\n    height\n    num_txs\n    timestamp\n    total_gas\n  }\n}"
+            },
+            {
+              "name": "checkins",
+              "query": "query MyQuery {\n  check_in(limit: 50) {\n    address\n    at\n    hash\n    id\n    timezone\n  }\n}"
+            }
+          ]
+        }
+      }
+    ],
+    "allowlist": [
+      {
+        "collection": "allowed-queries",
+        "scope": {
+          "global": true
+        }
+      }
+    ],
+    "rest_endpoints": [
+      {
+        "comment": "",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "blocks"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "blocks",
+        "url": "blocks"
+      },
+      {
+        "comment": "",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "checkins"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "checkins",
+        "url": "checkins"
+      }
+    ]
+  }
+}
