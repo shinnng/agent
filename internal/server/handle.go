@@ -4,6 +4,7 @@ import (
 	"agent/internal/conf"
 	"context"
 	"crypto/sha256"
+	"encoding/hex"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -27,7 +28,7 @@ func (p CachedReverseProxy) PerCheck() {
 func (p CachedReverseProxy) GetCacheKey(url string) string {
 	sha2 := sha256.New()
 	sha2.Write([]byte(url))
-	return string(sha2.Sum(nil))
+	return hex.EncodeToString(sha2.Sum(nil))
 }
 
 func (p *CachedReverseProxy) GetCacheData(req *http.Request) ([]byte, error) {
@@ -44,17 +45,6 @@ func (p *CachedReverseProxy) GetCacheData(req *http.Request) ([]byte, error) {
 
 	log.Debugf("get cache data succeed, len: %d", len(data))
 	return data, nil
-}
-
-func (p *CachedReverseProxy) SetCacheData(rw http.ResponseWriter, req *http.Request) error {
-	key := p.GetCacheKey(req.URL.String())
-	data := make([]byte, 0)
-	err := p.rdb.Set(p.ctx, key, data, 0).Err()
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (p *CachedReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {

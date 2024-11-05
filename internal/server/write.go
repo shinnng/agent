@@ -22,7 +22,7 @@ func NewCacheResponseWriter(key string, rw http.ResponseWriter, rdb *redis.Clien
 	return &CacheResponseWriter{
 		key: key,
 		rw:  rw,
-		buf: make([]byte, 0),
+		buf: make([]byte, 0, 5120),
 		ctx: context.Background(),
 		rdb: rdb,
 	}
@@ -42,7 +42,7 @@ func (w *CacheResponseWriter) PushCache() {
 			log.Debugf("writing to redis error: %v", err)
 		}
 
-		w.buf = make([]byte, 0)
+		w.buf = make([]byte, 0, 5120)
 		log.Debugf("writing to redis succeed, len: %d", len(data))
 	}(w.buf)
 }
