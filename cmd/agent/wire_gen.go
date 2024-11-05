@@ -20,19 +20,9 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-// Injectors from wire.go:
-
 // wireApp init kratos application.
-func wireApp(cfg *conf.Config, logger log.Logger) (*kratos.App, func(), error) {
-	//dataData, cleanup, err := data.NewData(confData, logger)
-	//if err != nil {
-	//	return nil, nil, err
-	//}
-	//greeterRepo := data.NewGreeterRepo(dataData, logger)
-	//greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	//greeterService := service.NewGreeterService(greeterUsecase)
-	//grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(cfg)
+func wireApp(cfg *conf.Config, apis *conf.Apis, logger log.Logger) (*kratos.App, func(), error) {
+	httpServer := server.NewHTTPServer(cfg, apis)
 	app := newApp(logger, httpServer)
 	return app, func() {
 		//cleanup()

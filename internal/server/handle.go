@@ -62,7 +62,7 @@ func (p *CachedReverseProxy) ServeHTTPByCache(rw http.ResponseWriter, req *http.
 
 	// write data to responseWrite
 	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
-	//rw.Header().Del("transfer-encoding")
+	rw.Header().Set("content-encoding", "gzip")
 	rw.WriteHeader(stdhttp.StatusOK)
 
 	// batch rw

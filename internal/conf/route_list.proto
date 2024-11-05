@@ -1,0 +1,20 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "agent/internal/conf;conf";
+
+message apis {
+  metadata metadata = 2;
+}
+
+message metadata {
+  int32 version = 1;
+  repeated endpoint rest_endpoints = 2;
+}
+
+message endpoint {
+  repeated string methods = 1;
+  string url = 2;
+}
+
+

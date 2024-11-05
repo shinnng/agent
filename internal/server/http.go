@@ -8,13 +8,12 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Config) *http.Server {
+func NewHTTPServer(c *conf.Config, apis *conf.Apis) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	// set agent options
 	if c.Agent.Network != "" {
 		opts = append(opts, http.Network(c.Agent.Network))
 	}
@@ -24,12 +23,16 @@ func NewHTTPServer(c *conf.Config) *http.Server {
 	if c.Agent.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Agent.Timeout.AsDuration()))
 	}
+	// set proxy option
 	if c.Data != nil {
 		opts = append(opts, CachedProxyOption(c.Data))
 	}
+	// set route white list
+	if apis != nil {
+		opts = append(opts, http.Middleware(RouteListMiddleware(apis)))
+	}
 
 	srv := http.NewServer(opts...)
-	// TODO: add path white list
 	circuitbreaker.Client()
 	return srv
 }

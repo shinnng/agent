@@ -68,11 +68,15 @@ func main() {
 	}
 
 	var cfg conf.Config
+	var apis conf.Apis
 	if err := c.Scan(&cfg); err != nil {
 		panic(err)
 	}
+	if err := c.Scan(&apis); err != nil {
+		panic(err)
+	}
 
-	app, cleanup, err := wireApp(&cfg, logger)
+	app, cleanup, err := wireApp(&cfg, &apis, logger)
 	if err != nil {
 		panic(err)
 	}
